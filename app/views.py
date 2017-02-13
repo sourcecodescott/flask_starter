@@ -6,9 +6,13 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, request, flash
 import time
+import smtplib
 
+
+##Secret Key to allow flashing
+app.secret_key='secret'
 
 
 ###
@@ -19,6 +23,43 @@ import time
 def home():
     """Render website's home page."""
     return render_template('home.html')
+    
+    
+#----------------------------------------------------------------------------------    
+    
+
+@app.route('/contact/', methods=['GET', 'POST'])
+def contact():
+    if (request.method == 'POST'):
+        from_name=request.form['name']
+        from_addr=request.form['m_addr']
+        subject=request.form['mail_sub']
+        msg=request.form['msg']
+        send_mail(from_name, from_addr, subject, msg)
+        flash('Message Sent Successfully')
+        return redirect(url_for('home'))
+    return render_template('contact.html')
+
+
+def send_mail(from_name, from_addr, subject, msg):
+    to_name = "Test"
+    to_addr = ""
+    message = """From: {} <{}>\nTo: {} <{}>\nSubject: {}\n{}"""
+    message_to_send = message.format(from_name, from_addr, to_name, to_addr, subject, msg)
+    # Credentials (if needed)
+    username = ''
+    password = ''
+    # The actual mail send
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.starttls()
+    server.login(username, password)
+    server.sendmail(from_addr, to_addr, message_to_send)
+    server.quit()
+
+
+#----------------------------------------------------------------------------------------------------------
+
+
 
 
 @app.route('/about/')
@@ -32,9 +73,6 @@ def timeinfo():
 @app.route('/profile/')
 def profile():
     return render_template('profile.html', currenttime=(timeinfo()))
-    
-
-
 
 ###
 # The functions below should be applicable to all Flask apps.
