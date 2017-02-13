@@ -1,3 +1,16 @@
 body {
   padding-top: 50px;
 }
+
+.f_field{
+    padding-bottom: 25px;
+}
+
+.f_label{
+    font-weight: bold;
+}
+
+span{
+    font-weight: bold;
+    color:red;
+}
