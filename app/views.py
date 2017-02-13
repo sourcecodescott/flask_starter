@@ -12,7 +12,7 @@ import smtplib
 
 
 ##Secret Key to allow flashing
-app.secret_key='secret'
+app.secret_key='mysecretkey'
 
 
 ###
@@ -32,9 +32,9 @@ def home():
 def contact():
     if (request.method == 'POST'):
         from_name=request.form['name']
-        from_addr=request.form['m_addr']
-        subject=request.form['mail_sub']
-        msg=request.form['msg']
+        from_addr=request.form['address']
+        subject=request.form['subject']
+        msg=request.form['message']
         send_mail(from_name, from_addr, subject, msg)
         flash('Message Sent Successfully')
         return redirect(url_for('home'))
@@ -42,7 +42,7 @@ def contact():
 
 
 def send_mail(from_name, from_addr, subject, msg):
-    to_name = "Test"
+    to_name = "John Brown"
     to_addr = ""
     message = """From: {} <{}>\nTo: {} <{}>\nSubject: {}\n{}"""
     message_to_send = message.format(from_name, from_addr, to_name, to_addr, subject, msg)
